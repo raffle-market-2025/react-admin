@@ -2,6 +2,10 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Box } from '@mui/material';
 import LabelIcon from '@mui/icons-material/Label';
+import CasinoIcon from '@mui/icons-material/Casino';
+import PeopleIcon from '@mui/icons-material/People';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import {
     useTranslate,
     DashboardMenuItem,
@@ -19,14 +23,20 @@ import categories from '../categories';
 import reviews from '../reviews';
 import SubMenu from './SubMenu';
 
-type MenuName = 'menuCatalog' | 'menuSales' | 'menuCustomers';
+type MenuName =
+    | 'menuCatalog'
+    | 'menuSales'
+    | 'menuCustomers'
+    | 'menuPromoRaffle';
 
 const Menu = ({ dense = false }: MenuProps) => {
     const [state, setState] = useState({
         menuCatalog: true,
         menuSales: true,
         menuCustomers: true,
+        menuPromoRaffle: true,
     });
+
     const translate = useTranslate();
     const [open] = useSidebarState();
 
@@ -52,6 +62,7 @@ const Menu = ({ dense = false }: MenuProps) => {
             })}
         >
             <DashboardMenuItem />
+
             <SubMenu
                 handleToggle={() => handleToggle('menuSales')}
                 isOpen={state.menuSales}
@@ -78,6 +89,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     dense={dense}
                 />
             </SubMenu>
+
             <SubMenu
                 handleToggle={() => handleToggle('menuCatalog')}
                 isOpen={state.menuCatalog}
@@ -104,6 +116,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     dense={dense}
                 />
             </SubMenu>
+
             <SubMenu
                 handleToggle={() => handleToggle('menuCustomers')}
                 isOpen={state.menuCustomers}
@@ -130,6 +143,43 @@ const Menu = ({ dense = false }: MenuProps) => {
                     dense={dense}
                 />
             </SubMenu>
+
+            <SubMenu
+                handleToggle={() => handleToggle('menuPromoRaffle')}
+                isOpen={state.menuPromoRaffle}
+                name="pos.menu.promoRaffle"
+                icon={<CasinoIcon />}
+                dense={dense}
+            >
+                <MenuItemLink
+                    to="/promoUsers"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(`resources.PromoUsers.name`, {
+                        smart_count: 2,
+                    })}
+                    leftIcon={<PeopleIcon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/promoBalance"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(`resources.PromoBalance.name`, {
+                        smart_count: 2,
+                    })}
+                    leftIcon={<AccountBalanceWalletIcon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/promoPickWinners"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(`resources.PromoPickWinners.name`, {
+                        smart_count: 2,
+                    })}
+                    leftIcon={<EmojiEventsIcon />}
+                    dense={dense}
+                />
+            </SubMenu>
+
             <MenuItemLink
                 to="/reviews"
                 state={{ _scrollToTop: true }}

@@ -27,6 +27,9 @@ run-tutorial: ## run the tutorial example
 run-demo: ## run the ecommerce example
 	@yarn run-demo
 
+run-raffle-admin: ## run the ecommerce example
+	@yarn run-raffle-admin
+
 build-demo: ## compile the ecommerce example to static js
 	@yarn build-demo
 
