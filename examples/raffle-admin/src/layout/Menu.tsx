@@ -154,27 +154,36 @@ const Menu = ({ dense = false }: MenuProps) => {
                 <MenuItemLink
                     to="/promoUsers"
                     state={{ _scrollToTop: true }}
-                    primaryText={translate(`resources.PromoUsers.name`, {
-                        smart_count: 2,
-                    })}
+                    primaryText={translate(
+                        `resources.PromoRaffle.promo_users`,
+                        {
+                            smart_count: 2,
+                        }
+                    )}
                     leftIcon={<PeopleIcon />}
                     dense={dense}
                 />
                 <MenuItemLink
                     to="/promoBalance"
                     state={{ _scrollToTop: true }}
-                    primaryText={translate(`resources.PromoBalance.name`, {
-                        smart_count: 2,
-                    })}
+                    primaryText={translate(
+                        `resources.PromoRaffle.promo_balance`,
+                        {
+                            smart_count: 2,
+                        }
+                    )}
                     leftIcon={<AccountBalanceWalletIcon />}
                     dense={dense}
                 />
                 <MenuItemLink
                     to="/promoPickWinners"
                     state={{ _scrollToTop: true }}
-                    primaryText={translate(`resources.PromoPickWinners.name`, {
-                        smart_count: 2,
-                    })}
+                    primaryText={translate(
+                        `resources.PromoRaffle.picked_winners`,
+                        {
+                            smart_count: 2,
+                        }
+                    )}
                     leftIcon={<EmojiEventsIcon />}
                     dense={dense}
                 />

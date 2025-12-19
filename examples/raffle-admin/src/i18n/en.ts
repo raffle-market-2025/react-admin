@@ -36,6 +36,7 @@ const customEnglishMessages: TranslationMessages = {
             sales: 'Sales',
             catalog: 'Catalog',
             customers: 'Customers',
+            promoRaffle: 'Promo Raffle',
         },
         events: {
             review: {
@@ -47,6 +48,11 @@ const customEnglishMessages: TranslationMessages = {
         },
     },
     resources: {
+        PromoRaffle: {
+            promo_users: 'Promo Users',
+            promo_balance: 'Balance',
+            picked_winners: 'Winners',
+        },
         customers: {
             name: 'Customer |||| Customers',
             fields: {
