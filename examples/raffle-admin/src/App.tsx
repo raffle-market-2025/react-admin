@@ -28,9 +28,14 @@ import { themes, ThemeName } from './themes/themes';
 
 // import promoUsers from './raffleEnter';
 import promoBalance from './promoRaffle/balance';
+import promoPrizePaid from './promoRaffle/prizePaid';
 import { buildPromoRaffleSubgraphDataProvider } from './dataProvider/promoRaffleSubgraphProvider';
 
-const SUBGRAPH_RESOURCES = new Set<string>(['PromoUsers', 'promoBalance']);
+const SUBGRAPH_RESOURCES = new Set<string>([
+    'PromoUsers',
+    'promoBalance',
+    'promoPrizePaid',
+]);
 
 const i18nProvider = polyglotI18nProvider(
     locale => {
@@ -115,6 +120,7 @@ const App = () => {
             {/* Subgraph resources */}
             {/* <Resource name="PromoUsers" {...promoUsers} /> */}
             <Resource name="promoBalance" {...promoBalance} />
+            <Resource name="promoPrizePaid" {...promoPrizePaid} />
         </Admin>
     );
 };

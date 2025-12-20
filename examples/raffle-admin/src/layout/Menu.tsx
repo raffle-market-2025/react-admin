@@ -5,6 +5,7 @@ import LabelIcon from '@mui/icons-material/Label';
 import CasinoIcon from '@mui/icons-material/Casino';
 import PeopleIcon from '@mui/icons-material/People';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import PaidIcon from '@mui/icons-material/Paid';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import {
     useTranslate,
@@ -180,23 +181,19 @@ const Menu = ({ dense = false }: MenuProps) => {
                     state={{ _scrollToTop: true }}
                     primaryText={translate(
                         `resources.PromoRaffle.promo_balance_charge`,
-                        {
-                            smart_count: 2,
-                        }
+                        { smart_count: 2 }
                     )}
                     leftIcon={<AccountBalanceWalletIcon />}
                     dense={dense}
                 />
                 <MenuItemLink
-                    to="/promoBalance"
+                    to="/promoPrizePaid"
                     state={{ _scrollToTop: true }}
                     primaryText={translate(
                         `resources.PromoRaffle.promo_balance_spent`,
-                        {
-                            smart_count: 2,
-                        }
+                        { smart_count: 2 }
                     )}
-                    leftIcon={<AccountBalanceWalletIcon />}
+                    leftIcon={<PaidIcon />}
                     dense={dense}
                 />
             </SubMenu>

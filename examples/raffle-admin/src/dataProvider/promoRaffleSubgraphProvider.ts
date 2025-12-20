@@ -65,9 +65,26 @@ const promoBalanceSpec: Spec = {
     `,
 };
 
+const promoPrizePaidSpec: Spec = {
+    one: 'rafflePrizePaid',
+    many: 'rafflePrizePaids',
+    filter: 'RafflePrizePaid_filter',
+    idVar: 'Bytes!',
+    orderBy: ['blockTimestamp', 'blockNumber', 'amount', 'winner', 'id'],
+    select: `
+        id
+        winner
+        amount
+        blockNumber
+        blockTimestamp
+        transactionHash
+    `,
+};
+
 const SPEC: Record<string, Spec> = {
     PromoUsers: raffleEnterSpec,
     promoBalance: promoBalanceSpec,
+    promoPrizePaid: promoPrizePaidSpec,
 
     RafflePrizePaid: {
         one: 'rafflePrizePaid',
