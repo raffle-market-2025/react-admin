@@ -26,7 +26,7 @@ import Segments from './segments/Segments';
 import visitors from './visitors';
 import { themes, ThemeName } from './themes/themes';
 
-// import promoUsers from './raffleEnter';
+import promoUsers from './promoRaffle/promoUsers';
 import promoPickWinners from './promoRaffle/winners';
 import promoBalance from './promoRaffle/balance';
 import promoPrizePaid from './promoRaffle/prizePaid';
@@ -120,7 +120,7 @@ const App = () => {
             <Resource name="reviews" {...reviews} />
 
             {/* Subgraph resources */}
-            {/* <Resource name="PromoUsers" {...promoUsers} /> */}
+            <Resource name="PromoUsers" {...promoUsers} />
             <Resource name="PromoPickWinners" {...promoPickWinners} />
             <Resource name="promoBalance" {...promoBalance} />
             <Resource name="promoPrizePaid" {...promoPrizePaid} />
