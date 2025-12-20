@@ -1,3 +1,4 @@
+import * as React from 'react';
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import {
     Admin,
@@ -6,6 +7,8 @@ import {
     localStorageStore,
     useStore,
     StoreContextProvider,
+    combineDataProviders,
+    type DataProvider,
 } from 'react-admin';
 import { Route } from 'react-router';
 
@@ -23,13 +26,17 @@ import Segments from './segments/Segments';
 import visitors from './visitors';
 import { themes, ThemeName } from './themes/themes';
 
+// import promoUsers from './raffleEnter';
+import promoBalance from './promoRaffle/balance';
+import { buildPromoRaffleSubgraphDataProvider } from './dataProvider/promoRaffleSubgraphProvider';
+
+const SUBGRAPH_RESOURCES = new Set<string>(['PromoUsers', 'promoBalance']);
+
 const i18nProvider = polyglotI18nProvider(
     locale => {
         if (locale === 'fr') {
             return import('./i18n/fr').then(messages => messages.default);
         }
-
-        // Always fallback on english
         return englishMessages;
     },
     'en',
@@ -43,15 +50,43 @@ const store = localStorageStore(undefined, 'ECommerce');
 
 const App = () => {
     const [themeName] = useStore<ThemeName>('themeName', 'soft');
-    const singleTheme = themes.find(theme => theme.name === themeName)?.single;
-    const lightTheme = themes.find(theme => theme.name === themeName)?.light;
-    const darkTheme = themes.find(theme => theme.name === themeName)?.dark;
+    const singleTheme = themes.find(t => t.name === themeName)?.single;
+    const lightTheme = themes.find(t => t.name === themeName)?.light;
+    const darkTheme = themes.find(t => t.name === themeName)?.dark;
+
+    const [dataProvider, setDataProvider] = React.useState<DataProvider | null>(
+        null
+    );
+
+    React.useEffect(() => {
+        const subgraph = buildPromoRaffleSubgraphDataProvider();
+
+        const restOrPromise = dataProviderFactory(
+            process.env.REACT_APP_DATA_PROVIDER || ''
+        );
+
+        const buildMultiplex = (rest: DataProvider) => {
+            const multiplex = combineDataProviders(resource =>
+                SUBGRAPH_RESOURCES.has(resource) ? subgraph : rest
+            );
+            // Important: use function form to avoid calling providers that might be functions
+            // (react-admin warns about this for legacy providers). :contentReference[oaicite:1]{index=1}
+            setDataProvider(() => multiplex);
+        };
+
+        if (restOrPromise instanceof Promise) {
+            restOrPromise.then(buildMultiplex);
+        } else {
+            buildMultiplex(restOrPromise as DataProvider);
+        }
+    }, []);
+
+    if (!dataProvider) return null;
+
     return (
         <Admin
             title="Posters Galore Admin"
-            dataProvider={dataProviderFactory(
-                process.env.REACT_APP_DATA_PROVIDER || ''
-            )}
+            dataProvider={dataProvider}
             store={store}
             authProvider={authProvider}
             dashboard={Dashboard}
@@ -68,12 +103,18 @@ const App = () => {
             <CustomRoutes>
                 <Route path="/segments" element={<Segments />} />
             </CustomRoutes>
+
+            {/* REST/demo resources */}
             <Resource name="customers" {...visitors} />
             <Resource name="orders" {...orders} />
             <Resource name="invoices" {...invoices} />
             <Resource name="products" {...products} />
             <Resource name="categories" {...categories} />
             <Resource name="reviews" {...reviews} />
+
+            {/* Subgraph resources */}
+            {/* <Resource name="PromoUsers" {...promoUsers} /> */}
+            <Resource name="promoBalance" {...promoBalance} />
         </Admin>
     );
 };

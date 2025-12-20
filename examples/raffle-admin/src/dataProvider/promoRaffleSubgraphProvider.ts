@@ -1,4 +1,3 @@
-// src/dataProvider/promoRaffleSubgraphProvider.ts
 import type {
     DataProvider,
     GetListParams,
@@ -14,6 +13,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+const DEFAULT_PAGINATION = { page: 1, perPage: 25 } as const;
+
 type Spec = {
     one: string;
     many: string;
@@ -23,48 +24,51 @@ type Spec = {
     select: string; // selection set
 };
 
-const DEFAULT_PAGINATION = { page: 1, perPage: 25 } as const;
+const raffleEnterSpec: Spec = {
+    one: 'raffleEnter',
+    many: 'raffleEnters',
+    filter: 'RaffleEnter_filter',
+    idVar: 'Bytes!',
+    orderBy: [
+        'blockTimestamp',
+        'blockNumber',
+        '_lastTimestamp',
+        '_player',
+        '_country3',
+        'id',
+    ],
+    select: `
+        id
+        _player
+        _ip
+        _country3
+        _lastTimestamp
+        blockNumber
+        blockTimestamp
+        transactionHash
+    `,
+};
+
+const promoBalanceSpec: Spec = {
+    one: 'raffleFundsReceived',
+    many: 'raffleFundsReceiveds',
+    filter: 'RaffleFundsReceived_filter',
+    idVar: 'Bytes!',
+    orderBy: ['blockTimestamp', 'blockNumber', 'amount', 'from', 'id'],
+    select: `
+        id
+        from
+        amount
+        blockNumber
+        blockTimestamp
+        transactionHash
+    `,
+};
 
 const SPEC: Record<string, Spec> = {
-    RaffleEnter: {
-        one: 'raffleEnter',
-        many: 'raffleEnters',
-        filter: 'RaffleEnter_filter',
-        idVar: 'Bytes!',
-        orderBy: [
-            'blockTimestamp',
-            'blockNumber',
-            '_lastTimestamp',
-            '_player',
-            '_country3',
-            'id',
-        ],
-        select: `
-      id
-      _player
-      _ip
-      _country3
-      _lastTimestamp
-      blockNumber
-      blockTimestamp
-      transactionHash
-    `,
-    },
-    RaffleFundsReceived: {
-        one: 'raffleFundsReceived',
-        many: 'raffleFundsReceiveds',
-        filter: 'RaffleFundsReceived_filter',
-        idVar: 'Bytes!',
-        orderBy: ['blockTimestamp', 'blockNumber', 'amount', 'from', 'id'],
-        select: `
-      id
-      from
-      amount
-      blockNumber
-      blockTimestamp
-      transactionHash
-    `,
-    },
+    PromoUsers: raffleEnterSpec,
+    promoBalance: promoBalanceSpec,
+
     RafflePrizePaid: {
         one: 'rafflePrizePaid',
         many: 'rafflePrizePaids',
@@ -201,8 +205,9 @@ export function buildPromoRaffleSubgraphDataProvider(opts?: {
     const auth = setContext((_, { headers }) => {
         const t =
             opts?.getAuthToken?.() ??
-            (import.meta.env.VITE_PROMO_RAFFLE_SUBGRAPH_API_KEY as string);
-        if (!t) throw new Error('Missing VITE_PROMO_RAFFLE_SUBGRAPH_API_KEY');
+            (import.meta.env.VITE_PROMO_RAFFLE_SUBGRAPH_API_KEY as
+                | string
+                | undefined);
 
         return {
             headers: {
@@ -365,7 +370,8 @@ export function buildPromoRaffleSubgraphDataProvider(opts?: {
 
         async getManyReference(resource, params: GetManyReferenceParams) {
             const s = spec(resource);
-            const { page, perPage } = params.pagination;
+            const pagination = params.pagination ?? DEFAULT_PAGINATION;
+            const { page, perPage } = pagination;
 
             const baseWhere = {
                 ...cleanWhere(params.filter),

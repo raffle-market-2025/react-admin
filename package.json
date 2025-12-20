@@ -15,6 +15,7 @@
         "run-simple": "cd examples/simple && yarn dev",
         "run-no-code": "cd examples/no-code && yarn dev",
         "run-tutorial": "cd examples/tutorial && yarn dev",
+        "run-raffle-admin": "cd examples/raffle-admin && cross-env REACT_APP_DATA_PROVIDER=rest yarn dev",
         "run-demo": "cd examples/demo && cross-env REACT_APP_DATA_PROVIDER=rest yarn dev",
         "build-demo": "cd examples/demo && cross-env REACT_APP_DATA_PROVIDER=rest yarn build",
         "run-graphql-demo": "cd examples/demo && cross-env REACT_APP_DATA_PROVIDER=graphql yarn dev",

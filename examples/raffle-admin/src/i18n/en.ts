@@ -50,8 +50,9 @@ const customEnglishMessages: TranslationMessages = {
     resources: {
         PromoRaffle: {
             promo_users: 'Promo Users',
-            promo_balance: 'Balance',
             picked_winners: 'Winners',
+            promo_balance_charge: 'Balance +',
+            promo_balance_spent: 'Balance -',
         },
         customers: {
             name: 'Customer |||| Customers',
