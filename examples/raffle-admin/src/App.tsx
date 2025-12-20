@@ -27,12 +27,14 @@ import visitors from './visitors';
 import { themes, ThemeName } from './themes/themes';
 
 // import promoUsers from './raffleEnter';
+import promoPickWinners from './promoRaffle/winners';
 import promoBalance from './promoRaffle/balance';
 import promoPrizePaid from './promoRaffle/prizePaid';
 import { buildPromoRaffleSubgraphDataProvider } from './dataProvider/promoRaffleSubgraphProvider';
 
 const SUBGRAPH_RESOURCES = new Set<string>([
     'PromoUsers',
+    'PromoPickWinners',
     'promoBalance',
     'promoPrizePaid',
 ]);
@@ -119,6 +121,7 @@ const App = () => {
 
             {/* Subgraph resources */}
             {/* <Resource name="PromoUsers" {...promoUsers} /> */}
+            <Resource name="PromoPickWinners" {...promoPickWinners} />
             <Resource name="promoBalance" {...promoBalance} />
             <Resource name="promoPrizePaid" {...promoPrizePaid} />
         </Admin>

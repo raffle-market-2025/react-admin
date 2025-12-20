@@ -65,6 +65,59 @@ const Menu = ({ dense = false }: MenuProps) => {
             <DashboardMenuItem />
 
             <SubMenu
+                handleToggle={() => handleToggle('menuPromoRaffle')}
+                isOpen={state.menuPromoRaffle}
+                name="pos.menu.promoRaffle"
+                icon={<CasinoIcon />}
+                dense={dense}
+            >
+                <MenuItemLink
+                    to="/promoUsers"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(
+                        `resources.PromoRaffle.promo_users`,
+                        {
+                            smart_count: 2,
+                        }
+                    )}
+                    leftIcon={<PeopleIcon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/promoPickWinners"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(
+                        `resources.PromoRaffle.picked_winners`,
+                        {
+                            smart_count: 2,
+                        }
+                    )}
+                    leftIcon={<EmojiEventsIcon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/promoBalance"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(
+                        `resources.PromoRaffle.promo_balance_charge`,
+                        { smart_count: 2 }
+                    )}
+                    leftIcon={<AccountBalanceWalletIcon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/promoPrizePaid"
+                    state={{ _scrollToTop: true }}
+                    primaryText={translate(
+                        `resources.PromoRaffle.promo_balance_spent`,
+                        { smart_count: 2 }
+                    )}
+                    leftIcon={<PaidIcon />}
+                    dense={dense}
+                />
+            </SubMenu>
+
+            <SubMenu
                 handleToggle={() => handleToggle('menuSales')}
                 isOpen={state.menuSales}
                 name="pos.menu.sales"
@@ -141,59 +194,6 @@ const Menu = ({ dense = false }: MenuProps) => {
                         smart_count: 2,
                     })}
                     leftIcon={<LabelIcon />}
-                    dense={dense}
-                />
-            </SubMenu>
-
-            <SubMenu
-                handleToggle={() => handleToggle('menuPromoRaffle')}
-                isOpen={state.menuPromoRaffle}
-                name="pos.menu.promoRaffle"
-                icon={<CasinoIcon />}
-                dense={dense}
-            >
-                <MenuItemLink
-                    to="/promoUsers"
-                    state={{ _scrollToTop: true }}
-                    primaryText={translate(
-                        `resources.PromoRaffle.promo_users`,
-                        {
-                            smart_count: 2,
-                        }
-                    )}
-                    leftIcon={<PeopleIcon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/promoPickWinners"
-                    state={{ _scrollToTop: true }}
-                    primaryText={translate(
-                        `resources.PromoRaffle.picked_winners`,
-                        {
-                            smart_count: 2,
-                        }
-                    )}
-                    leftIcon={<EmojiEventsIcon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/promoBalance"
-                    state={{ _scrollToTop: true }}
-                    primaryText={translate(
-                        `resources.PromoRaffle.promo_balance_charge`,
-                        { smart_count: 2 }
-                    )}
-                    leftIcon={<AccountBalanceWalletIcon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/promoPrizePaid"
-                    state={{ _scrollToTop: true }}
-                    primaryText={translate(
-                        `resources.PromoRaffle.promo_balance_spent`,
-                        { smart_count: 2 }
-                    )}
-                    leftIcon={<PaidIcon />}
                     dense={dense}
                 />
             </SubMenu>
