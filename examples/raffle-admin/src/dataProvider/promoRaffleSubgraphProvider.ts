@@ -56,11 +56,18 @@ const PromoPickWinnersSpec: Spec = {
     many: 'winnerPickeds',
     filter: 'WinnerPicked_filter',
     idVar: 'Bytes!',
-    orderBy: ['blockTimestamp', 'blockNumber', 'cycle', 'winner', 'id'],
+    orderBy: [
+        'blockTimestamp',
+        'blockNumber',
+        'cycle',
+        'playersBeforePick',
+        'winner',
+        'id',
+    ],
     select: `
         id
         cycle
-        players
+        playersBeforePick
         winner
         blockNumber
         blockTimestamp
