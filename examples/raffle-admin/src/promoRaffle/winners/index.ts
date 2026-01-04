@@ -1,10 +1,9 @@
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-
-import { PromoPickWinnersList } from './PromoPickWinnersList';
-import { PromoPickWinnersShow } from './PromoPickWinnersShow';
+import { WinnersList } from './WinnersList';
+import { WinnersShow } from './WinnersShow';
 
 export default {
-    list: PromoPickWinnersList,
-    show: PromoPickWinnersShow,
+    list: WinnersList,
+    show: WinnersShow,
     icon: EmojiEventsIcon,
 };
