@@ -1,32 +1,21 @@
 import * as React from 'react';
 import {
-    Datagrid,
-    FunctionField,
     List,
-    SearchInput,
-    ShowButton,
+    Datagrid,
     TextField,
-    TextInput,
+    FunctionField,
     TopToolbar,
-    FilterButton,
     ExportButton,
-    ListProps,
-    NumberInput,
+    FilterButton,
+    TextInput,
 } from 'react-admin';
-import { Chip, Stack } from '@mui/material';
+import { countryHexToFlag } from '../utils/country';
 
-const filters = [
-    <SearchInput key="q" source="q" alwaysOn />,
-    <TextInput key="player" source="_player" label="Player (0x…)" />,
-    <TextInput key="country3" source="_country3" label="Country3 (bytes3)" />,
-    <TextInput key="ip" source="_ip" label="IP" />,
-    <TextInput key="tx" source="transactionHash" label="Tx hash (0x…)" />,
-    <NumberInput
-        key="ts_gte"
-        source="blockTimestamp_gte"
-        label="From ts (>=)"
-    />,
-    <NumberInput key="ts_lte" source="blockTimestamp_lte" label="To ts (<=)" />,
+const promoUsersFilters = [
+    <TextInput key="player" source="_player" label="Player" alwaysOn />,
+    <TextInput key="country" source="_country3" label="Country3" />,
+    <TextInput key="cycle" source="cycle" label="Cycle" />,
+    <TextInput key="tx" source="transactionHash" label="Tx hash" />,
 ];
 
 const ListActions = () => (
@@ -36,116 +25,52 @@ const ListActions = () => (
     </TopToolbar>
 );
 
-function shortHex(v?: string, left = 8, right = 6) {
-    if (!v) return '';
-    if (!v.startsWith('0x')) return v;
-    if (v.length <= left + right + 2) return v;
-    return `${v.slice(0, left + 2)}…${v.slice(-right)}`;
-}
+const shortHex = (v?: string, n = 6) =>
+    !v ? '' : v.length <= 2 + n * 2 ? v : `${v.slice(0, 2 + n)}…${v.slice(-n)}`;
 
-function toDateFromSeconds(sec?: string | number) {
-    if (sec == null) return null;
-    const n = typeof sec === 'number' ? sec : Number(sec);
-    if (!Number.isFinite(n)) return null;
-    return new Date(n * 1000);
-}
+const tsToLocal = (v?: any) => {
+    const s = v == null ? '' : String(v);
+    const num = Number(s);
+    if (!Number.isFinite(num) || num <= 0) return '';
+    return new Date(num * 1000).toLocaleString();
+};
 
-export const PromoUsersList = (props: ListProps) => (
+export const PromoUsersList = () => (
     <List
-        {...props}
         actions={<ListActions />}
-        filters={filters}
+        filters={promoUsersFilters}
         sort={{ field: 'blockTimestamp', order: 'DESC' }}
         perPage={25}
     >
-        <Datagrid rowClick={false} bulkActionButtons={false}>
+        <Datagrid rowClick="show">
             <FunctionField
                 label="Player"
-                render={(r: any) =>
-                    r?._player ? (
-                        <Chip
-                            size="small"
-                            variant="outlined"
-                            label={shortHex(String(r._player))}
-                            title={String(r._player)}
-                        />
-                    ) : (
-                        ''
-                    )
-                }
+                render={(r: any) => shortHex(r?._player, 8)}
             />
-
             <FunctionField
-                label="Country3"
-                render={(r: any) =>
-                    r?._country3 ? (
-                        <Chip
-                            size="small"
-                            label={shortHex(String(r._country3), 6, 4)}
-                            title={String(r._country3)}
-                        />
-                    ) : (
-                        ''
-                    )
-                }
+                label="IP hash"
+                render={(r: any) => shortHex(r?._ipHash, 8)}
             />
-
             <FunctionField
-                label="IP"
-                render={(r: any) =>
-                    r?._ip ? (
-                        <Chip
-                            size="small"
-                            variant="outlined"
-                            label={String(r._ip)}
-                        />
-                    ) : (
-                        ''
-                    )
-                }
-            />
-
-            <FunctionField
-                label="Last ts"
+                label="Country"
                 render={(r: any) => {
-                    const d = toDateFromSeconds(r?._lastTimestamp);
-                    return d ? d.toLocaleString() : r?._lastTimestamp ?? '';
+                    const { flag, a3 } = countryHexToFlag(r?._country3);
+                    return `${flag} ${a3}`;
                 }}
             />
-
-            <TextField source="blockNumber" label="Block" />
-
+            <TextField source="cycle" label="Cycle" />
+            <FunctionField
+                label="Entered at"
+                render={(r: any) => tsToLocal(r?._lastTimestamp)}
+            />
             <FunctionField
                 label="Block time"
-                render={(r: any) => {
-                    const d = toDateFromSeconds(r?.blockTimestamp);
-                    return d ? d.toLocaleString() : r?.blockTimestamp ?? '';
-                }}
+                render={(r: any) => tsToLocal(r?.blockTimestamp)}
             />
-
             <FunctionField
                 label="Tx"
-                render={(r: any) =>
-                    r?.transactionHash ? (
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <Chip
-                                size="small"
-                                variant="outlined"
-                                label={shortHex(
-                                    String(r.transactionHash),
-                                    10,
-                                    8
-                                )}
-                                title={String(r.transactionHash)}
-                            />
-                        </Stack>
-                    ) : (
-                        ''
-                    )
-                }
+                render={(r: any) => shortHex(r?.transactionHash, 10)}
             />
-
-            <ShowButton />
         </Datagrid>
     </List>
 );

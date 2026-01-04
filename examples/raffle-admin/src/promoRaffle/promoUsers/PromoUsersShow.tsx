@@ -1,118 +1,38 @@
 import * as React from 'react';
-import {
-    Show,
-    SimpleShowLayout,
-    TextField,
-    FunctionField,
-    ShowProps,
-} from 'react-admin';
-import { Chip, Stack, Typography } from '@mui/material';
+import { Show, SimpleShowLayout, TextField, FunctionField } from 'react-admin';
+import { countryHexToFlag } from '../utils/country';
 
-function shortHex(v?: string, left = 10, right = 8) {
-    if (!v) return '';
-    if (!v.startsWith('0x')) return v;
-    if (v.length <= left + right + 2) return v;
-    return `${v.slice(0, left + 2)}…${v.slice(-right)}`;
-}
+const tsToLocal = (v?: any) => {
+    const s = v == null ? '' : String(v);
+    const num = Number(s);
+    if (!Number.isFinite(num) || num <= 0) return '';
+    return new Date(num * 1000).toLocaleString();
+};
 
-function toDateFromSeconds(sec?: string | number) {
-    if (sec == null) return null;
-    const n = typeof sec === 'number' ? sec : Number(sec);
-    if (!Number.isFinite(n)) return null;
-    return new Date(n * 1000);
-}
-
-const MonoRow = ({ label, value }: { label: string; value?: string }) => (
-    <Stack spacing={0.5}>
-        <Typography variant="subtitle2">{label}</Typography>
-        <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-            {value ?? '—'}
-        </Typography>
-    </Stack>
-);
-
-export const PromoUsersShow = (props: ShowProps) => (
-    <Show {...props}>
+export const PromoUsersShow = () => (
+    <Show>
         <SimpleShowLayout>
-            <TextField source="id" label="ID" />
-
+            <TextField source="id" />
+            <TextField source="_player" label="Player" />
+            <TextField source="_ipHash" label="IP hash" />
             <FunctionField
-                label="Player"
-                render={(r: any) =>
-                    r?._player ? (
-                        <Chip
-                            size="small"
-                            variant="outlined"
-                            label={shortHex(String(r._player))}
-                            title={String(r._player)}
-                        />
-                    ) : (
-                        '—'
-                    )
-                }
-            />
-
-            <FunctionField
-                label="IP"
-                render={(r: any) =>
-                    r?._ip ? (
-                        <Chip
-                            size="small"
-                            variant="outlined"
-                            label={String(r._ip)}
-                        />
-                    ) : (
-                        '—'
-                    )
-                }
-            />
-
-            <FunctionField
-                label="Country3"
-                render={(r: any) =>
-                    r?._country3 ? (
-                        <Chip
-                            size="small"
-                            label={shortHex(String(r._country3), 8, 6)}
-                            title={String(r._country3)}
-                        />
-                    ) : (
-                        '—'
-                    )
-                }
-            />
-
-            <FunctionField
-                label="Last timestamp"
+                label="Country"
                 render={(r: any) => {
-                    const d = toDateFromSeconds(r?._lastTimestamp);
-                    return d ? d.toLocaleString() : r?._lastTimestamp ?? '—';
+                    const { flag, a3, a2 } = countryHexToFlag(r?._country3);
+                    return a2 ? `${flag} ${a3} (${a2})` : `${flag} ${a3}`;
                 }}
             />
-
-            <TextField source="blockNumber" label="Block" />
-
+            <TextField source="cycle" label="Cycle" />
             <FunctionField
-                label="Block timestamp"
-                render={(r: any) => {
-                    const d = toDateFromSeconds(r?.blockTimestamp);
-                    return d ? d.toLocaleString() : r?.blockTimestamp ?? '—';
-                }}
+                label="LastTimestamp"
+                render={(r: any) => tsToLocal(r?._lastTimestamp)}
             />
-
+            <TextField source="blockNumber" />
             <FunctionField
-                label="Transaction hash"
-                render={(r: any) =>
-                    r?.transactionHash ? (
-                        <MonoRow
-                            label="Tx hash"
-                            value={String(r.transactionHash)}
-                        />
-                    ) : (
-                        '—'
-                    )
-                }
+                label="BlockTimestamp"
+                render={(r: any) => tsToLocal(r?.blockTimestamp)}
             />
+            <TextField source="transactionHash" />
         </SimpleShowLayout>
     </Show>
 );

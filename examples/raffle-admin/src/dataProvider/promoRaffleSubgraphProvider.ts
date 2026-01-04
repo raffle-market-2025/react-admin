@@ -33,20 +33,22 @@ const raffleEnterSpec: Spec = {
         'blockTimestamp',
         'blockNumber',
         '_lastTimestamp',
+        'cycle',
         '_player',
         '_country3',
         'id',
     ],
     select: `
-        id
-        _player
-        _ip
-        _country3
-        _lastTimestamp
-        blockNumber
-        blockTimestamp
-        transactionHash
-    `,
+    id
+    _player
+    _ipHash
+    _country3
+    _lastTimestamp
+    cycle
+    blockNumber
+    blockTimestamp
+    transactionHash
+  `,
 };
 
 const PromoPickWinnersSpec: Spec = {
