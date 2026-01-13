@@ -13,7 +13,7 @@ import { countryHexToFlag } from '../utils/country';
 
 const promoUsersFilters = [
     <TextInput key="player" source="_player" label="Player" alwaysOn />,
-    <TextInput key="country" source="_country3" label="Country3" />,
+    <TextInput key="country" source="_country2" label="Country2" />,
     <TextInput key="cycle" source="cycle" label="Cycle" />,
     <TextInput key="tx" source="transactionHash" label="Tx hash" />,
 ];
@@ -54,7 +54,10 @@ export const PromoUsersList = () => (
             <FunctionField
                 label="Country"
                 render={(r: any) => {
-                    const { flag, a3 } = countryHexToFlag(r?._country3);
+                    // ABI сейчас bytes2 => _country2.
+                    // Fallback на _country3 на случай старых данных/микса источников.
+                    const raw = r?._country2 ?? r?._country3;
+                    const { flag, a3 } = countryHexToFlag(raw);
                     return `${flag} ${a3}`;
                 }}
             />

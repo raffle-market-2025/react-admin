@@ -159,14 +159,35 @@ export function alpha2ToFlagEmoji(alpha2?: string): string {
     return String.fromCodePoint(A + c1, A + c2);
 }
 
-// ---------- Convenience: bytes3 hex -> flag + codes ----------
+// ---------- Convenience: bytes2/bytes3 hex -> flag + codes ----------
 export function countryHexToFlag(hex?: string): {
     flag: string;
     a3: string;
     a2: string;
 } {
-    const a3 = bytes3HexToAlpha3(hex);
-    const a2 = alpha3ToAlpha2Code(a3);
-    const flag = a2 ? alpha2ToFlagEmoji(a2) : '🏳️';
-    return { flag, a3, a2 };
+    // decode up to 3 bytes, but result can be 2 letters (bytes2) or 3 letters (bytes3)
+    const code = bytes3HexToAlpha3(hex); // may return "US" or "UKR" (or "UNK")
+
+    if (code === 'UNK') {
+        return { flag: '🏳️', a3: 'UNK', a2: '' };
+    }
+
+    // bytes2 path: code is alpha-2 (e.g., "US")
+    if (/^[A-Z]{2}$/.test(code)) {
+        const a2 = code;
+        const a3 = alpha2ToAlpha3Code(a2); // "USA" or "UNK"
+        const flag = alpha2ToFlagEmoji(a2);
+        return { flag, a3, a2 };
+    }
+
+    // bytes3 path: code is alpha-3 (e.g., "UKR")
+    if (/^[A-Z]{3}$/.test(code)) {
+        const a3 = code;
+        const a2 = alpha3ToAlpha2Code(a3); // may be ""
+        const flag = a2 ? alpha2ToFlagEmoji(a2) : '🏳️';
+        return { flag, a3, a2 };
+    }
+
+    // fallback
+    return { flag: '🏳️', a3: 'UNK', a2: '' };
 }

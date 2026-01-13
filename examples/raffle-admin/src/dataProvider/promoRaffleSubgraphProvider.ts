@@ -35,14 +35,14 @@ const raffleEnterSpec: Spec = {
         '_lastTimestamp',
         'cycle',
         '_player',
-        '_country3',
+        '_country2',
         'id',
     ],
     select: `
     id
     _player
     _ipHash
-    _country3
+    _country2
     _lastTimestamp
     cycle
     blockNumber
