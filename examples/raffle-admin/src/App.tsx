@@ -135,3 +135,20 @@ const AppWrapper = () => (
 );
 
 export default AppWrapper;
+
+// import { Admin, Resource } from "react-admin";
+// import { authProvider } from "./authProvider";
+// import { makeSupabaseDataProvider } from "./dataProvider/supabaseDataProvider";
+// import { AssignCountryRoles } from "./resources/ops/AssignCountryRoles";
+
+// const dataProvider = makeSupabaseDataProvider();
+
+// export default function App() {
+//   return (
+//     <Admin dataProvider={dataProvider} authProvider={authProvider}>
+//       <Resource name="app_users" />
+//       <Resource name="user_country_roles" />
+//       <Resource name="ops" create={AssignCountryRoles} />
+//     </Admin>
+//   );
+// }

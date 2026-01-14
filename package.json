@@ -114,5 +114,8 @@
             "Documentation": "Documentation",
             "TypeScript": "TypeScript"
         }
+    },
+    "dependencies": {
+        "@supabase/supabase-js": "^2.90.1"
     }
 }
